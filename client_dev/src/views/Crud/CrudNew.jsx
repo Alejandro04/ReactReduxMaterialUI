@@ -42,7 +42,7 @@ class CrudNew extends Component{
 AddProduct(newProduct){
     axios.request({
         method: 'post',
-        url: 'http://localhost:3000/api/products',
+        url: 'http://localhost:3001/api/products',
         data: newProduct
     }).then(response => {
         //this.props.history.push('/')
@@ -58,8 +58,7 @@ onSubmit(e){
         stock: this.refs.stock.value,
     }
 
-   // this.AddProduct(newProduct)
-   console.log(newProduct)
+    this.AddProduct(newProduct)
     e.preventDefault()
 }
 
