@@ -1,4 +1,5 @@
-import React from "react";
+import React, { Component } from 'react';
+import axios from 'axios'
 // @material-ui/core components
 import withStyles from "@material-ui/core/styles/withStyles";
 // core components
@@ -44,6 +45,70 @@ const styles = {
   }
 };
 
+class CrudProcess extends Component{
+  constructor(props){
+    super(props)
+
+    this.state = {
+      products: []
+    }
+  }
+
+  componentWillMount(){
+    this.getProducts();
+  }
+
+  getProducts(){
+    axios.get('http://localhost:3001/api/products')
+    .then(response => {
+        this.setState({products: response.data}, () => {
+            console.log(this.state.products)
+        })
+    })
+    .catch (err => console.log(err))
+  }
+
+  render(){
+    const productItems = this.state.products.map((prod, i) => {
+        return(
+            [
+                prod.name, prod.description, prod.sales_price, prod.stock
+            ]
+        )
+    })
+    return (
+      <GridContainer>
+        <GridItem xs={12} sm={12} md={12}>
+          <Button variant="outlined" href="/crudnew" className={this.props.classes.buttonAdd} color="primary">
+            Nuevo Producto
+          </Button>
+          </GridItem>
+        <GridItem xs={12} sm={12} md={12}>
+          <Card>
+            <CardHeader color="primary">
+              <h4 className={this.props.classes.cardTitleWhite}>Lista de Productos</h4>
+              <p className={this.props.classes.cardCategoryWhite}>
+                Here is a subtitle for this table
+              </p>
+            </CardHeader>
+            <CardBody>
+              <Table
+                tableHeaderColor="primary"
+                tableHead={["Nombre", "Descripcion", "Precio de Venta", "Stock"]}
+                tableData={productItems}
+              />
+            </CardBody>
+          </Card>
+        </GridItem>
+      </GridContainer>
+    )
+  }
+}
+
+export default withStyles(styles)(CrudProcess)
+
+/*
+
 function CrudProcess(props) {
   const { classes } = props;
   return (
@@ -78,4 +143,6 @@ function CrudProcess(props) {
   );
 }
 
-export default withStyles(styles)(CrudProcess);
+*/
+
+//export default withStyles(styles)(CrudProcess);
