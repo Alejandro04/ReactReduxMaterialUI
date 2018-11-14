@@ -11,6 +11,8 @@ import CardHeader from "components/Card/CardHeader.jsx";
 import CardBody from "components/Card/CardBody.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
+// store
+import { connect } from 'react-redux';
 
 const styles = {
   cardCategoryWhite: {
@@ -61,9 +63,9 @@ class CrudProcess extends Component{
   getProducts(){
     axios.get('http://localhost:3001/api/products')
     .then(response => {
-        this.setState({products: response.data}, () => {
-            console.log(this.state.products)
-        })
+        this.setState({products: response.data}, () => {})
+        const data = response.data
+        this.props.dispatch({ type:'GET_ALL_PRODUCTS', data}); //store
     })
     .catch (err => console.log(err))
   }
@@ -78,11 +80,6 @@ class CrudProcess extends Component{
     })
     return (
       <GridContainer>
-        <GridItem xs={12} sm={12} md={12}>
-          <Button variant="outlined" href="/crudnew" className={this.props.classes.buttonAdd} color="primary">
-            Nuevo Producto
-          </Button>
-          </GridItem>
         <GridItem xs={12} sm={12} md={12}>
           <Card>
             <CardHeader color="primary">
@@ -101,8 +98,10 @@ class CrudProcess extends Component{
           </Card>
         </GridItem>
       </GridContainer>
+      
     )
   }
 }
 
-export default withStyles(styles)(CrudProcess)
+
+export default connect()(withStyles(styles)(CrudProcess));

@@ -13,6 +13,9 @@ import CardFooter from "components/Card/CardFooter.jsx";
 
 import axios from 'axios';
 
+// store
+import { connect } from 'react-redux';
+
 const styles = {
   cardCategoryWhite: {
     color: "rgba(255,255,255,.62)",
@@ -35,31 +38,39 @@ const styles = {
 
 class CrudNew extends Component{
 
- constructor(props){
+constructor(props){
      super(props)
- }
 
-AddProduct(newProduct){
+     this.state = {
+         quantity: 0,
+     }
+}
+
+componentDidMount(){
+    console.log(this.props.products.products[0].length)
+}
+
+AddProduct(data){
     axios.request({
         method: 'post',
         url: 'http://localhost:3001/api/products',
-        data: newProduct
+        data: data
     }).then(response => {
-        //this.props.history.push('/')
-        console.log(response)
+        this.props.history.push('/crud')
     }).catch(err => console.log(err))
 }
 
 onSubmit(e){
-    const newProduct = {
+    e.preventDefault()
+
+    const data = {
         name: this.refs.name.value,
         description: this.refs.description.value,
         sales_price: this.refs.sales_price.value,
         stock: this.refs.stock.value,
     }
 
-    this.AddProduct(newProduct)
-    e.preventDefault()
+    this.AddProduct(data)
 }
 
  render(){
@@ -67,6 +78,7 @@ onSubmit(e){
     <div>
         <form onSubmit={this.onSubmit.bind(this)}>
             <GridContainer>
+                <p>CANTIDAD DE REGISTROS = {this.props.products.products[0].length}</p>
                 <GridItem xs={12} sm={12} md={12}>
                 <Card>
                     <CardHeader color="primary" className={this.props.classes.cardsItem}>
@@ -122,8 +134,15 @@ onSubmit(e){
  }
 }
 
-export default withStyles({
+
+
+const mapStateToProps = (state) => {
+    return {
+        products: state
+    }
+  }
+  export default connect(mapStateToProps)(withStyles({
     cardsItem: {
         padding: '10px !important',
     }
-})(CrudNew)
+})(CrudNew));

@@ -16,8 +16,8 @@ import Icons from "views/Icons/Icons.jsx";
 import Maps from "views/Maps/Maps.jsx";
 import NotificationsPage from "views/Notifications/Notifications.jsx";
 import UpgradeToPro from "views/UpgradeToPro/UpgradeToPro.jsx";
-import CrudProcess from "views/Crud/CrudProcess.jsx";
-import CrudNew from 'views/Crud/CrudNew.jsx'
+import CrudProcess from "containers/Crud/CrudProcess.jsx";
+import CrudNew from "containers/Crud/CrudNew.jsx"
 
 const dashboardRoutes = [
   {
