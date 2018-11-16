@@ -15,6 +15,7 @@ import axios from 'axios';
 
 // store
 import { connect } from 'react-redux';
+import getAllProducts from '../../initializers/actions'
 
 const styles = {
   cardCategoryWhite: {
@@ -42,12 +43,18 @@ constructor(props){
      super(props)
 
      this.state = {
-         quantity: 0,
+         quantityProducts: []
      }
 }
 
 componentDidMount(){
-    console.log(this.props.products.products[0].length)
+    this.props.getAllProducts()
+    if (this.props.products.products[0] == undefined){
+        console.log('vacio')
+    }else{
+        //this.props.products.products.length-1 = indice // muestra la cantidad de registros del estado mas reciente
+        this.setState({quantityProducts: this.props.products.products[this.props.products.products.length-1].length}, () => {})
+    }
 }
 
 AddProduct(data){
@@ -78,7 +85,7 @@ onSubmit(e){
     <div>
         <form onSubmit={this.onSubmit.bind(this)}>
             <GridContainer>
-                <p>CANTIDAD DE REGISTROS = {this.props.products.products[0].length}</p>
+                <p>CANTIDAD DE REGISTROS = {this.state.quantityProducts}</p>
                 <GridItem xs={12} sm={12} md={12}>
                 <Card>
                     <CardHeader color="primary" className={this.props.classes.cardsItem}>
@@ -134,14 +141,17 @@ onSubmit(e){
  }
 }
 
-
-
 const mapStateToProps = (state) => {
     return {
         products: state
     }
-  }
-  export default connect(mapStateToProps)(withStyles({
+}
+
+const mapDispatchToProps = {
+    getAllProducts
+}
+  
+  export default connect(mapStateToProps, mapDispatchToProps)(withStyles({
     cardsItem: {
         padding: '10px !important',
     }

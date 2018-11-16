@@ -12,7 +12,8 @@ import CardBody from "components/Card/CardBody.jsx";
 import Button from "components/CustomButtons/Button.jsx";
 
 // store
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
+import getAllProducts from '../../initializers/actions'
 
 const styles = {
   cardCategoryWhite: {
@@ -57,17 +58,14 @@ class CrudProcess extends Component{
   }
 
   componentWillMount(){
-    this.getProducts();
-  }
+   this.props.getAllProducts()
 
-  getProducts(){
-    axios.get('http://localhost:3001/api/products')
-    .then(response => {
-        this.setState({products: response.data}, () => {})
-        const data = response.data
-        this.props.dispatch({ type:'GET_ALL_PRODUCTS', data}); //store
-    })
-    .catch (err => console.log(err))
+   if (this.props.products.products[0] == undefined){
+    console.log('vacio process')
+    }else{
+        //this.props.products.products.length-1 = indice // muestra el estado mas reciente
+        this.setState({products: this.props.products.products[this.props.products.products.length-1]}, () => {})
+    }
   }
 
   render(){
@@ -103,5 +101,15 @@ class CrudProcess extends Component{
   }
 }
 
+const mapStateToProps = (state) => {
+  return {
+      products: state
+  }
+}
 
-export default connect()(withStyles(styles)(CrudProcess));
+const mapDispatchToProps = {
+  getAllProducts
+}
+
+
+export default connect(mapStateToProps, mapDispatchToProps)(withStyles(styles)(CrudProcess));
